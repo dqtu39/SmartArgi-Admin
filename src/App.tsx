@@ -66,6 +66,9 @@ import "@refinedev/antd/dist/reset.css";
 import "./styles/antd.css";
 import "./styles/fc.css";
 import "./styles/index.css";
+import {
+  KnowledgeCreatePage, KnowledgeBase
+} from "@/routes/knowledge-base";
 
 const App: React.FC = () => {
   // This hook is used to automatically login the user.
@@ -192,6 +195,10 @@ const App: React.FC = () => {
                       path="/companies/edit/:id"
                       element={<CompanyEditPage />}
                     />
+                    <Route
+                      path="knowledge-base"
+                      element={<KnowledgeBase/>}
+                    ></Route>
                     <Route
                       path="/contacts"
                       element={

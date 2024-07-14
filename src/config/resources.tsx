@@ -1,6 +1,7 @@
 import type { IResourceItem } from "@refinedev/core";
 
 import {
+  BookOutlined,
   CalendarOutlined,
   ContainerOutlined,
   CrownOutlined,
@@ -32,79 +33,17 @@ export const resources: IResourceItem[] = [
       icon: <CalendarOutlined />,
     },
   },
-  {
-    name: "scrumboard",
-    meta: {
-      label: "Scrumboard",
-      // @ts-expect-error Ant Design Icon's v5.0.1 has an issue with @types/react@^18.2.66
-      icon: <ProjectOutlined />,
-    },
-  },
 
   {
-    name: "tasks",
-    list: "/scrumboard/kanban",
-    create: "/scrumboard/kanban/create",
-    edit: "/scrumboard/kanban/edit/:id",
+    name: "knowledge base",
+    list: "/knowledge-base",
+    // create: "/contacts/create",
+    // edit: "/contacts/edit/:id",
+    // show: "/contacts/show/:id",
     meta: {
-      label: "Project Kanban",
-      parent: "scrumboard",
-    },
-  },
-  {
-    name: "taskStages",
-    create: "/scrumboard/kanban/stages/create",
-    edit: "/scrumboard/kanban/stages/edit/:id",
-    list: "/scrumboard/kanban",
-    meta: {
-      hide: true,
-    },
-  },
-  {
-    name: "deals",
-    list: "/scrumboard/sales",
-    create: "/scrumboard/sales/create",
-    edit: "/scrumboard/sales/edit/:id",
-    meta: {
-      label: "Sales Pipeline",
-      parent: "scrumboard",
-    },
-  },
-  {
-    name: "deals",
-    identifier: "finalize-deals",
-    edit: "/scrumboard/sales/:id/finalize",
-    meta: {
-      hide: true,
-    },
-  },
-  {
-    name: "dealStages",
-    create: "/scrumboard/sales/stages/create",
-    edit: "/scrumboard/sales/stages/edit/:id",
-    list: "/scrumboard/sales",
-    meta: {
-      hide: true,
-    },
-  },
-  {
-    name: "companies",
-    list: "/companies",
-    show: "/companies/:id",
-    create: "/companies/create",
-    edit: "/companies/edit/:id",
-    meta: {
-      label: "Companies",
+      label: "Knowledge base",
       // @ts-expect-error Ant Design Icon's v5.0.1 has an issue with @types/react@^18.2.66
-      icon: <ShopOutlined />,
-    },
-  },
-  {
-    name: "companies",
-    identifier: "sales-companies",
-    create: "/scrumboard/sales/create/company/create",
-    meta: {
-      hide: true,
+      icon: <BookOutlined />,
     },
   },
   {
