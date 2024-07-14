@@ -8,6 +8,22 @@ export interface KnowledgeUploadResponse {
 }
 
 axiosInstance.defaults.baseURL = 'http://localhost:8000';
+
+export interface KnowledgeItem {
+    title: string;
+    language: string;
+    source: string;
+}
+
+export interface GetAllDocumentsResponse {
+    total: number;
+    documents: KnowledgeItem[];
+}
+
+export const getAllDocuments = async (): Promise<GetAllDocumentsResponse> => {
+    const response = await axiosInstance.get('/api/v1/docs/getAllDocuments?collection=algo_documents');
+    return response.data;
+};
 export const uploadText = async (text: string): Promise<any> => {
     const response = await axiosInstance.post('/api/v1/docs/uploadText', { document_text: text });
     return response.data;
