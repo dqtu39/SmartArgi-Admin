@@ -100,7 +100,7 @@ td.ant-table-column-sort {
 }
 
 .ant-table-tbody > tr:first-child > td {
-    padding: 0px !important;
+    /*padding: 0px !important;*/
 }
 
 .ant-page-header-content {

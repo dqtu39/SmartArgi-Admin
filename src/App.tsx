@@ -66,8 +66,7 @@ import "@refinedev/antd/dist/reset.css";
 import "./styles/antd.css";
 import "./styles/fc.css";
 import "./styles/index.css";
-import {
-  KnowledgeCreatePage, KnowledgeBase
+import {KnowledgeBase
 } from "@/routes/knowledge-base";
 
 const App: React.FC = () => {
