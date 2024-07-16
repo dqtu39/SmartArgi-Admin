@@ -54,33 +54,59 @@ export const authProvider: AuthProvider = {
       };
     }
 
+    // try {
+    //   const { data } = await dataProvider.custom({
+    //     url: API_URL,
+    //     method: "post",
+    //     headers: {},
+    //     meta: {
+    //       variables: { email },
+    //       rawQuery: `
+    //             mutation Login($email: String!) {
+    //                 login(loginInput: {
+    //                   email: $email
+    //                 }) {
+    //                   accessToken,
+    //                   refreshToken
+    //                 }
+    //               }
+    //             `,
+    //     },
+    //   });
+    //
+    //   client.setHeaders({
+    //     Authorization: `Bearer ${data.login.accessToken}`,
+    //   });
+    //
+    //   enableAutoLogin(email);
+    //   localStorage.setItem("access_token", data.login.accessToken);
+    //   localStorage.setItem("refresh_token", data.login.refreshToken);
+    //
+    //   return {
+    //     success: true,
+    //     redirectTo: "/",
+    //   };
+    // } catch (error: any) {
+    //   return {
+    //     success: false,
+    //     error: {
+    //       message: "message" in error ? error.message : "Login failed",
+    //       name: "name" in error ? error.name : "Invalid email or password",
+    //     },
+    //   };
+    // }
     try {
-      const { data } = await dataProvider.custom({
-        url: API_URL,
-        method: "post",
-        headers: {},
-        meta: {
-          variables: { email },
-          rawQuery: `
-                mutation Login($email: String!) {
-                    login(loginInput: {
-                      email: $email
-                    }) {
-                      accessToken,
-                      refreshToken
-                    }
-                  }
-                `,
-        },
-      });
+      // Generate mock tokens (you might want to use more secure methods in a real application)
+      const mockAccessToken = `mock_access_token_${Date.now()}`;
+      const mockRefreshToken = `mock_refresh_token_${Date.now()}`;
 
       client.setHeaders({
-        Authorization: `Bearer ${data.login.accessToken}`,
+        Authorization: `Bearer ${mockAccessToken}`,
       });
 
       enableAutoLogin(email);
-      localStorage.setItem("access_token", data.login.accessToken);
-      localStorage.setItem("refresh_token", data.login.refreshToken);
+      localStorage.setItem("access_token", mockAccessToken);
+      localStorage.setItem("refresh_token", mockRefreshToken);
 
       return {
         success: true,
@@ -90,8 +116,8 @@ export const authProvider: AuthProvider = {
       return {
         success: false,
         error: {
-          message: "message" in error ? error.message : "Login failed",
-          name: "name" in error ? error.name : "Invalid email or password",
+          message: "Auto-login simulation failed",
+          name: "Login Error",
         },
       };
     }
@@ -158,30 +184,33 @@ export const authProvider: AuthProvider = {
     return { error };
   },
   check: async () => {
-    try {
-      await dataProvider.custom({
-        url: API_URL,
-        method: "post",
-        headers: {},
-        meta: {
-          rawQuery: `
-                    query Me {
-                        me {
-                          name
-                        }
-                      }
-                `,
-        },
-      });
-
-      return {
-        authenticated: true,
-      };
-    } catch (error) {
-      return {
-        authenticated: false,
-      };
-    }
+    // try {
+    //   await dataProvider.custom({
+    //     url: API_URL,
+    //     method: "post",
+    //     headers: {},
+    //     meta: {
+    //       rawQuery: `
+    //                 query Me {
+    //                     me {
+    //                       name
+    //                     }
+    //                   }
+    //             `,
+    //     },
+    //   });
+    //
+    //   return {
+    //     authenticated: true,
+    //   };
+    // } catch (error) {
+    //   return {
+    //     authenticated: false,
+    //   };
+    // }
+    return {
+      authenticated: true,
+    };
   },
   forgotPassword: async () => {
     return {
@@ -196,31 +225,40 @@ export const authProvider: AuthProvider = {
     };
   },
   getIdentity: async () => {
-    try {
-      const { data } = await dataProvider.custom<{ me: User }>({
-        url: API_URL,
-        method: "post",
-        headers: {},
-        meta: {
-          rawQuery: `
-                    query Me {
-                        me {
-                            id,
-                            name,
-                            email,
-                            phone,
-                            jobTitle,
-                            timezone
-                            avatarUrl
-                        }
-                      }
-                `,
-        },
-      });
-
-      return data.me;
-    } catch (error) {
-      return undefined;
-    }
+    // try {
+    //   const { data } = await dataProvider.custom<{ me: User }>({
+    //     url: API_URL,
+    //     method: "post",
+    //     headers: {},
+    //     meta: {
+    //       rawQuery: `
+    //                 query Me {
+    //                     me {
+    //                         id,
+    //                         name,
+    //                         email,
+    //                         phone,
+    //                         jobTitle,
+    //                         timezone
+    //                         avatarUrl
+    //                     }
+    //                   }
+    //             `,
+    //     },
+    //   });
+    //
+    //   return data.me;
+    // } catch (error) {
+    //   return undefined;
+    // }
+    return {
+      id: "1",
+      name: "Auto Logged User",
+      email: "auto@example.com",
+      phone: "+1234567890",
+      jobTitle: "Automatic User",
+      timezone: "UTC",
+      avatarUrl: "https://example.com/avatar.jpg",
+    };
   },
 };

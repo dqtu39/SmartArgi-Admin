@@ -68,6 +68,7 @@ import "./styles/fc.css";
 import "./styles/index.css";
 import {KnowledgeBase
 } from "@/routes/knowledge-base";
+import {EmissionFactor} from "@/routes/emission-factor";
 
 const App: React.FC = () => {
   // This hook is used to automatically login the user.
@@ -197,6 +198,10 @@ const App: React.FC = () => {
                     <Route
                       path="knowledge-base"
                       element={<KnowledgeBase/>}
+                    ></Route>
+                    <Route
+                        path="emission-factor"
+                        element={<EmissionFactor/>}
                     ></Route>
                     <Route
                       path="/contacts"

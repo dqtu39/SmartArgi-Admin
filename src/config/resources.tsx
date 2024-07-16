@@ -1,6 +1,7 @@
 import type { IResourceItem } from "@refinedev/core";
 
 import {
+  AuditOutlined,
   BookOutlined,
   CalendarOutlined,
   ContainerOutlined,
@@ -44,6 +45,15 @@ export const resources: IResourceItem[] = [
       label: "Knowledge base",
       // @ts-expect-error Ant Design Icon's v5.0.1 has an issue with @types/react@^18.2.66
       icon: <BookOutlined />,
+    },
+  },
+  {
+    name: "",
+    list: "/emission-factor",
+    meta: {
+      label: "Emission factor",
+      // @ts-expect-error Ant Design Icon's v5.0.1 has an issue with @types/react@^18.2.66
+      icon: <AuditOutlined />,
     },
   },
   {

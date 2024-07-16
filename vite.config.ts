@@ -14,4 +14,13 @@ export default defineConfig({
       },
     },
   },
+  server: {
+    proxy: {
+      '/api': {
+        target: 'https://api.crm.refine.dev',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, '')
+      }
+    }
+  }
 });
