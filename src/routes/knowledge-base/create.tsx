@@ -1,9 +1,7 @@
-import React, {FunctionComponent, useState} from "react";
+import React, {FunctionComponent} from "react";
 
-import { useNavigation} from "@refinedev/core";
-
-import {Button, Form, Input, Modal, Segmented, Upload,} from "antd";
 import {UploadOutlined} from "@ant-design/icons";
+import {Button, Form, Input, Modal, Segmented, Upload,} from "antd";
 
 
 type ModelProps = {
@@ -11,10 +9,14 @@ type ModelProps = {
     onFinish: (values: any) => void;
 };
 
-export const KnowledgeCreatePage: FunctionComponent<ModelProps> = ({ isModelOpen, onFinish, form, onCancel, segmentType, setSegmentType}) => {
-    const { list, replace } = useNavigation();
-
-
+export const KnowledgeCreatePage: FunctionComponent<ModelProps> = ({
+                                                                       isModelOpen,
+                                                                       onFinish,
+                                                                       form,
+                                                                       onCancel,
+                                                                       segmentType,
+                                                                       setSegmentType
+                                                                   }) => {
 
     return (
         <>
@@ -30,11 +32,11 @@ export const KnowledgeCreatePage: FunctionComponent<ModelProps> = ({ isModelOpen
                     form={form}
                     layout="vertical"
                     onFinish={onFinish}
-                    initialValues={{ segment: "file" }}
+                    initialValues={{segment: "file"}}
                 >
                     <Form.Item
-                    label={"Type"}
-                    name="segment">
+                        label={"Type"}
+                        name="segment">
                         <Segmented
                             options={['link', 'file', 'text']}
                             onChange={(value) => setSegmentType(value.toString())}
@@ -44,10 +46,10 @@ export const KnowledgeCreatePage: FunctionComponent<ModelProps> = ({ isModelOpen
                         <Form.Item
                             name="document_file"
                             label="Upload File"
-                            rules={[{ required: true, message: 'Please upload a file' }]}
+                            rules={[{required: true, message: 'Please upload a file'}]}
                         >
                             <Upload>
-                                <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                                <Button icon={<UploadOutlined/>}>Click to Upload</Button>
                             </Upload>
                         </Form.Item>
                     )}
@@ -55,19 +57,30 @@ export const KnowledgeCreatePage: FunctionComponent<ModelProps> = ({ isModelOpen
                         <Form.Item
                             name="document_link"
                             label="Link"
-                            rules={[{ required: true, message: 'Please enter a link' }]}
+                            rules={[{required: true, message: 'Please enter a link'}]}
                         >
-                            <Input placeholder="Enter link here" />
+                            <Input placeholder="Enter link here"/>
                         </Form.Item>
                     )}
                     {segmentType === "text" && (
-                        <Form.Item
-                            name="document_text"
-                            label="Description"
-                            rules={[{ required: true, message: 'Please enter a description' }]}
-                        >
-                            <Input.TextArea rows={4} placeholder="Enter description here" />
-                        </Form.Item>
+                        <>
+                            <Form.Item
+                                name="document_title"
+                                label="Link"
+                                rules={[{required: true, message: 'Please enter a title'}]}
+                            >
+                                <Input placeholder="Enter document title here"/>
+                            </Form.Item>
+                            <Form.Item
+                                name="document_text"
+                                label="Description"
+                                rules={[{required: true, message: 'Please enter a description'}]}
+                            >
+                                <Input.TextArea rows={4} placeholder="Enter description here"/>
+                            </Form.Item>
+                        </>
+
+
                     )}
 
                 </Form>

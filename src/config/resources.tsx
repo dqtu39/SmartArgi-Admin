@@ -6,7 +6,7 @@ import {
   CalendarOutlined,
   ContainerOutlined,
   CrownOutlined,
-  DashboardOutlined,
+  DashboardOutlined, FormOutlined,
   ProjectOutlined,
   ShopOutlined,
   TeamOutlined,
@@ -23,19 +23,6 @@ export const resources: IResourceItem[] = [
     },
   },
   {
-    name: "events",
-    list: "/calendar",
-    create: "/calendar/create",
-    edit: "/calendar/edit/:id",
-    show: "/calendar/show/:id",
-    meta: {
-      label: "Calendar",
-      // @ts-expect-error Ant Design Icon's v5.0.1 has an issue with @types/react@^18.2.66
-      icon: <CalendarOutlined />,
-    },
-  },
-
-  {
     name: "knowledge base",
     list: "/knowledge-base",
     // create: "/contacts/create",
@@ -48,12 +35,21 @@ export const resources: IResourceItem[] = [
     },
   },
   {
-    name: "",
+    name: "Emission factor",
     list: "/emission-factor",
     meta: {
       label: "Emission factor",
       // @ts-expect-error Ant Design Icon's v5.0.1 has an issue with @types/react@^18.2.66
       icon: <AuditOutlined />,
+    },
+  },
+  {
+    name: "blog",
+    list: "/blogs",
+    meta: {
+      label: "Blogs",
+      // @ts-expect-error Ant Design Icon's v5.0.1 has an issue with @types/react@^18.2.66
+      icon: <FormOutlined />,
     },
   },
   {
@@ -66,42 +62,6 @@ export const resources: IResourceItem[] = [
       label: "Contacts",
       // @ts-expect-error Ant Design Icon's v5.0.1 has an issue with @types/react@^18.2.66
       icon: <TeamOutlined />,
-    },
-  },
-  {
-    name: "quotes",
-    list: "/quotes",
-    create: "/quotes/create",
-    edit: "/quotes/edit/:id",
-    show: "/quotes/show/:id",
-    meta: {
-      label: "Quotes",
-      // @ts-expect-error Ant Design Icon's v5.0.1 has an issue with @types/react@^18.2.66
-      icon: <ContainerOutlined />,
-    },
-  },
-  {
-    name: "administration",
-    meta: {
-      label: "Administration",
-      // @ts-expect-error Ant Design Icon's v5.0.1 has an issue with @types/react@^18.2.66
-      icon: <CrownOutlined />,
-    },
-  },
-  {
-    name: "settings",
-    list: "/administration/settings",
-    meta: {
-      label: "Settings",
-      parent: "administration",
-    },
-  },
-  {
-    name: "audits",
-    list: "/administration/audit-log",
-    meta: {
-      label: "Audit Log",
-      parent: "administration",
     },
   },
 ];

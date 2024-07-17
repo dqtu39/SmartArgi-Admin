@@ -104,7 +104,7 @@ export const KnowledgeBase = () => {
                     response = await uploadLink(values.document_link);
                     break;
                 case "text":
-                    response = await uploadText(values.document_text);
+                    response = await uploadText(values.document_text, values.document_title);
                     break;
                 default:
                     handleCancel()

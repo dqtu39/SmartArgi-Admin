@@ -24,8 +24,8 @@ export const getAllDocuments = async (): Promise<GetAllDocumentsResponse> => {
     const response = await axiosInstance.get('/api/v1/docs/getAllDocuments?collection=algo_documents');
     return response.data;
 };
-export const uploadText = async (text: string): Promise<any> => {
-    const response = await axiosInstance.post('/api/v1/docs/uploadText', { document_text: text });
+export const uploadText = async (text: string, title: string): Promise<any> => {
+    const response = await axiosInstance.post('/api/v1/docs/uploadText', {document_title:title, document_text: text });
     return response.data;
 };
 
