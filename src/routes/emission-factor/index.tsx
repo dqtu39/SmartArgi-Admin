@@ -1,326 +1,122 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ColumnsType } from "antd/es/table";
 import { Input, Space, Table } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '@/firebase';
 
 interface EmissionData {
     key: string;
-    Name: string;
-    Type: string;
+    name: string;
+    type: string;
     scope: number;
-    CO2: string | null;
-    CO2_unit: string | null;
-    CH4: string | null;
-    CH4_unit: string;
-    N2O: string | null;
-    N2O_unit: string;
-    Source: string;
-    Link: string | null;
+    co2: string | null;
+    co2_unit: string | null;
+    ch4: string | null;
+    ch4_unit: string;
+    n2o: string | null;
+    n2o_unit: string;
+    source: string;
+    link: string | null;
 }
 
-interface EmissionsTableProps {
-    data: EmissionData[];
-}
-
-const mockData = [
-    {
-        "Name": "Continuous Flooding",
-        "CO2": "0 kg",
-        "CH4": "1.3 kg",
-        "N2O": null,
-        "CH4_unit": "",
-        "N2O_unit": "",
-        "scope": 1,
-        "CO2_unit": null,
-        "Source": "IPCC 2006 Guidelines",
-        "Link": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/",
-        "Type": "Rice cultivation"
-    },
-    {
-        "Name": "Intermittent Flooding (Single aeration)",
-        "CO2": "0 kg",
-        "CH4": "0.8 kg",
-        "N2O": null,
-        "CH4_unit": "",
-        "N2O_unit": "",
-        "scope": 1,
-        "CO2_unit": null,
-        "Source": "IPCC 2006 Guidelines",
-        "Link": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/",
-        "Type": "Rice cultivation"
-    },
-    {
-        "Name": "Intermittently Flooded Fields (Multiple aeration)",
-        "CO2": "0 kg",
-        "CH4": "0.5 kg",
-        "N2O": null,
-        "CH4_unit": "",
-        "N2O_unit": "",
-        "scope": 1,
-        "CO2_unit": null,
-        "Source": "IPCC 2006 Guidelines",
-        "Link": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/",
-        "Type": "Rice cultivation"
-    },
-    {
-        "Name": "Rainfed Deep water",
-        "CO2": "0 kg",
-        "CH4": "0.2 kg",
-        "N2O": null,
-        "CH4_unit": "",
-        "N2O_unit": "",
-        "scope": 1,
-        "CO2_unit": null,
-        "Source": "IPCC 2006 Guidelines",
-        "Link": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/",
-        "Type": "Rice cultivation"
-    },
-    {
-        "Name": "Upland (Not flooded at all)",
-        "CO2": null,
-        "CH4": null,
-        "N2O": null,
-        "CH4_unit": "",
-        "N2O_unit": "",
-        "scope": 1,
-        "CO2_unit": null,
-        "Source": "IPCC 2006 Guidelines",
-        "Link": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/",
-        "Type": "Rice cultivation"
-    },
-    {
-        "Name": "Straw incorporated shortly (30 days) before cultivation",
-        "CO2": "0 kg",
-        "CH4": null,
-        "N2O": null,
-        "CH4_unit": "",
-        "N2O_unit": "",
-        "scope": 1,
-        "CO2_unit": null,
-        "Source": "IPCC 2006 Guidelines",
-        "Link": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/",
-        "Type": "Rice cultivation"
-    },
-    {
-        "Name": "Straw incorporated long (>30 days) before cultivation",
-        "CO2": "0 kg",
-        "CH4": null,
-        "N2O": "0.20 kg",
-        "CH4_unit": "",
-        "N2O_unit": "",
-        "scope": 1,
-        "CO2_unit": null,
-        "Source": "IPCC 2006 Guidelines",
-        "Link": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/",
-        "Type": "Rice cultivation"
-    },
-    {
-        "Name": "Compost",
-        "CO2": "0 kg",
-        "CH4": null,
-        "N2O": "0.05 kg",
-        "CH4_unit": "",
-        "N2O_unit": "",
-        "scope": 1,
-        "CO2_unit": null,
-        "Source": "IPCC 2006 Guidelines",
-        "Link": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/",
-        "Type": "Fertiliser/waste application"
-    },
-    {
-        "Name": "Farm yard manure",
-        "CO2": "0 kg",
-        "CH4": "0.14 kg",
-        "N2O": "0.15 kg",
-        "CH4_unit": "",
-        "N2O_unit": "",
-        "scope": 1,
-        "CO2_unit": null,
-        "Source": "IPCC 2006 Guidelines",
-        "Link": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/",
-        "Type": "Manure"
-    },
-    {
-        "Name": "Green manure",
-        "CO2": "0 kg",
-        "CH4": null,
-        "N2O": "0.35 kg",
-        "CH4_unit": "",
-        "N2O_unit": "",
-        "scope": 1,
-        "CO2_unit": null,
-        "Source": "IPCC 2006 Guidelines",
-        "Link": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/",
-        "Type": "Manure"
-    },
-    {
-        "Name": "Pesticide",
-        "CO2": "18.3 kg",
-        "CH4": null,
-        "N2O": "0 kg",
-        "CH4_unit": "",
-        "N2O_unit": "",
-        "scope": 1,
-        "CO2_unit": null,
-        "Source": "Ecoinvent - Life cycle databases",
-        "Link": "ecoinvent - Data with purpose",
-        "Type": "Soil/waste pollution"
-    },
-    {
-        "Name": "Herbicide",
-        "CO2": "15 kg",
-        "CH4": null,
-        "N2O": "0 kg",
-        "CH4_unit": "",
-        "N2O_unit": "",
-        "scope": 1,
-        "CO2_unit": null,
-        "Source": "Ecoinvent - Life cycle databases",
-        "Link": "ecoinvent - Data with purpose",
-        "Type": "Soil/waste pollution"
-    },
-    {
-        "Name": "Fungicide",
-        "CO2": "10 kg",
-        "CH4": null,
-        "N2O": "0 kg",
-        "CH4_unit": "",
-        "N2O_unit": "",
-        "scope": 1,
-        "CO2_unit": null,
-        "Source": "Ecoinvent - Life cycle databases",
-        "Link": "ecoinvent - Data with purpose",
-        "Type": "Soil/waste pollution"
-    },
-    {
-        "Name": "Insecticide",
-        "CO2": "20 kg",
-        "CH4": null,
-        "N2O": "0 kg",
-        "CH4_unit": "",
-        "N2O_unit": "",
-        "scope": 1,
-        "CO2_unit": "0 kg",
-        "Source": "Ecoinvent",
-        "Link": null,
-        "Type": "Fertiliser/waste application"
-    },
-    {
-        "Name": "Synthetic fertilizer",
-        "CO2": null,
-        "CH4": null,
-        "N2O": "0.01 kg",
-        "CH4_unit": "",
-        "N2O_unit": "",
-        "scope": 1,
-        "CO2_unit": null,
-        "Source": "IPCC 2006 Guidelines",
-        "Link": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/",
-        "Type": "Soil/waste pollution"
-    },
-    {
-        "Name": "Animal manure",
-        "CO2": null,
-        "CH4": null,
-        "N2O": "0.01 kg",
-        "CH4_unit": "",
-        "N2O_unit": "",
-        "scope": 1,
-        "CO2_unit": null,
-        "Source": "IPCC 2006 Guidelines",
-        "Link": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/",
-        "Type": "Manure"
-    },
-    {
-        "Name": "Landfilling",
-        "CO2": null,
-        "CH4": null,
-        "N2O": "0.015 kg",
-        "CH4_unit": "",
-        "N2O_unit": "",
-        "scope": 1,
-        "CO2_unit": null,
-        "Source": "IPCC 2006 Guidelines",
-        "Link": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/",
-        "Type": "Fertiliser/waste application"
-    },
-    {
-        "Name": "Incineration",
-        "CO2": "0.9 kg",
-        "CH4": "0.0027 kg",
-        "N2O": "0.0007 kg",
-        "CH4_unit": "",
-        "N2O_unit": "",
-        "scope": 1,
-        "CO2_unit": null,
-        "Source": "IPCC 2006 Guidelines",
-        "Link": "https://www.ipcc-nggip.iges.or.jp/public/2006gl/",
-        "Type": "Biomass burning"
-    },
-    {
-        "Name": "Burning crop residues",
-        "CO2": null,
-        "CH4": null,
-        "N2O": "0.00007 kg",
-        "CH4_unit": "",
-        "N2O_unit": "",
-        "scope": 1,
-        "CO2_unit": null,
-        "Source": null,
-        "Link": null,
-        "Type": "Biomass burning"
-    }
-]
- const EmissionsTable: React.FC<EmissionsTableProps | []> = ({data}) => {
+const EmissionsTable: React.FC = () => {
     const [searchText, setSearchText] = useState('');
+    const [data, setData] = useState<EmissionData[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const emissionsCollection = collection(db, 'emission_factors');
+                const emissionSnapshot = await getDocs(emissionsCollection);
+                const emissionList = emissionSnapshot.docs.map(doc => ({
+                    key: doc.id,
+                    ...doc.data()
+                } as EmissionData));
+                setData(emissionList);
+                setLoading(false);
+            } catch (error) {
+                console.error("Error fetching data: ", error);
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, []);
 
     const columns: ColumnsType<EmissionData> = [
         {
             title: 'Name',
-            dataIndex: 'Name',
-            key: 'Name',
+            dataIndex: 'name',
+            key: 'name',
             filteredValue: [searchText],
             onFilter: (value, record) =>
-                record.Name.toLowerCase().includes(value.toString().toLowerCase()),
+                record.name.toLowerCase().includes(value.toString().toLowerCase()),
+            width: 200,
+            ellipsis: true,
         },
         {
             title: 'Type',
-            dataIndex: 'Type',
-            key: 'Type',
+            dataIndex: 'type',
+            key: 'type',
+            width: 150,
+            ellipsis: true,
         },
         {
             title: 'Scope',
             dataIndex: 'scope',
             key: 'scope',
+            width: 80,
         },
         {
             title: 'CO2',
-            dataIndex: 'CO2',
-            key: 'CO2',
-            render: (text, record) => text ? `${text} ${record.CO2_unit || ''}` : '-',
+            dataIndex: 'co2',
+            key: 'co2',
+            width: 100,
+        },
+        {
+            title: 'CO2 Unit',
+            dataIndex: 'co2_unit',
+            key: 'co2_unit',
+            width: 100,
         },
         {
             title: 'CH4',
-            dataIndex: 'CH4',
-            key: 'CH4',
-            render: (text, record) => text ? `${text} ${record.CH4_unit}` : '-',
+            dataIndex: 'ch4',
+            key: 'ch4',
+            width: 100,
+        },
+        {
+            title: 'CH4 Unit',
+            dataIndex: 'ch4_unit',
+            key: 'ch4_unit',
+            width: 100,
         },
         {
             title: 'N2O',
-            dataIndex: 'N2O',
-            key: 'N2O',
-            render: (text, record) => text ? `${text} ${record.N2O_unit}` : '-',
+            dataIndex: 'n2o',
+            key: 'n2o',
+            width: 100,
+        },
+        {
+            title: 'N2O Unit',
+            dataIndex: 'n2o_unit',
+            key: 'n2o_unit',
+            width: 100,
         },
         {
             title: 'Source',
-            dataIndex: 'Source',
-            key: 'Source',
+            dataIndex: 'source',
+            key: 'source',
             render: (text, record) => (
-                record.Link ?
-                    <a href={record.Link} target="_blank" rel="noopener noreferrer">
+                record.link ?
+                    <a href={record.link} target="_blank" rel="noopener noreferrer">
                         {text}
                     </a> : text
             ),
+            width: 200,
+            ellipsis: true,
         },
     ];
 
@@ -336,10 +132,12 @@ const mockData = [
                 style={{ width: 300, padding: 10, marginBottom: 10 }}
                 prefix={<SearchOutlined />}
             />
-            <Table
-                <EmissionData>
+            <Table<EmissionData>
                 columns={columns}
-                dataSource={data.map((item, index) => ({ ...item, key: index.toString() }))}
+                dataSource={data}
+                loading={loading}
+                scroll={{ x: 1300, y: 500 }}
+                pagination={{ pageSize: 10 }}
             />
         </Space>
     );
@@ -348,8 +146,7 @@ const mockData = [
 export const EmissionFactor: React.FC = () => {
     return (
         <div>
-            <EmissionsTable data={mockData} />
+            <EmissionsTable />
         </div>
     );
 };
-
