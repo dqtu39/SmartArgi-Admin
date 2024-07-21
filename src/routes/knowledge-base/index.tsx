@@ -7,67 +7,14 @@ import {KnowledgeCreatePage} from "@/routes/knowledge-base/create";
 import KnowledgeList from "@/routes/knowledge-base/KnowledgeList";
 import {getAllDocuments, KnowledgeItem, uploadFile, uploadLink, uploadText} from "@/service/knowledgeService";
 
-const mockData = {
-    "total": 10,
-    "documents": [
-        {
-            "title": "carbon-accounting-ke-toan-carbon-la-gi",
-            "language": "vietnamese",
-            "source": "https://fpt-is.com/goc-nhin-so/carbon-accounting-ke-toan-carbon-la-gi"
-        },
-        {
-            "title": "Contact Information",
-            "language": "english",
-            "source": "Hãy bảo vệ không khí, và nguồn nước.pdf"
-        },
-        {
-            "title": "Phụ lục BẢN CÔNG BỐ THÔNG TIN VỀ GIỐNG CÂY TRỒNG",
-            "language": "vietnamese",
-            "source": "Phu-luc-giong-LÚA.docx"
-        },
-        {
-            "title": "VietGAP là gì? 7 bước chứng nhận VietGAP",
-            "language": "vietnamese",
-            "source": "https://vnce.vn/vietgap-la-gi"
-        },
-        {
-            "title": "Bệnh gỉ sắt trên cây trồng",
-            "language": "vietnamese",
-            "source": ""
-        },
-        {
-            "title": "Farm Dashboard: The no.1 Tool for effective data-driven decisions",
-            "language": "english",
-            "source": "https://www.farm21.com/farm-dashboard-make-data-driven-decisions/#main"
-        },
-        {
-            "title": "carbon-neutral-la-gi",
-            "language": "vietnamese",
-            "source": "https://fpt-is.com/goc-nhin-so/carbon-neutral-la-gi"
-        },
-        {
-            "title": "carbon-footprint-la-gi",
-            "language": "vietnamese",
-            "source": "https://fpt-is.com/goc-nhin-so/carbon-footprint-la-gi"
-        },
-        {
-            "title": "Farm21: Farming Platform for Growers, Crop Advisors and Researchers",
-            "language": "english",
-            "source": "https://www.farm21.com/farming-platform-to-farm-smarter/"
-        },
-        {
-            "title": "FS21 Features Developed over the last 4 years",
-            "language": "english",
-            "source": ""
-        }
-    ]
-}
 export const KnowledgeBase = () => {
     const [isModelOpen, setIsModelOpen] = useState<boolean>(false);
     const [form] = Form.useForm();
     const [segmentType, setSegmentType] = useState<string>("file");
     const [documents, setDocuments] = useState<KnowledgeItem[]>([]);
     const [total, setTotal] = useState<number>(0);
+    const [loading, setLoading] = useState(true);
+
 
     useEffect(() => {
         fetchDocuments();
@@ -78,7 +25,9 @@ export const KnowledgeBase = () => {
             const response = await getAllDocuments();
             setDocuments(response.documents);
             setTotal(response.total);
+            setLoading(false)
         } catch (error) {
+            setLoading(false)
             console.error("Error fetching documents:", error);
             message.error("Failed to fetch documents");
         }
@@ -89,7 +38,6 @@ export const KnowledgeBase = () => {
     };
 
     const handleFinish = async (values: any) => {
-        console.log(values)
         try {
             let response;
             switch (segmentType) {
@@ -102,6 +50,7 @@ export const KnowledgeBase = () => {
                     break;
                 case "link":
                     response = await uploadLink(values.document_link);
+                    console.log(response)
                     break;
                 case "text":
                     response = await uploadText(values.document_text, values.document_title);
@@ -111,7 +60,7 @@ export const KnowledgeBase = () => {
                     throw new Error("Invalid segment type");
             }
 
-            if (response.success) {
+            if (response.STATUS) {
                 message.success("Knowledge uploaded successfully");
                 if (response.document) {
                     setDocuments(prevDocuments => [...prevDocuments, response.document]);
@@ -159,7 +108,7 @@ export const KnowledgeBase = () => {
                 onFinish={handleFinish}
                 isModelOpen={isModelOpen}
             />
-            <KnowledgeList data={{ total, documents }} />
+            <KnowledgeList loading={loading} data={{ total, documents }} />
         </Space>
     );
 };

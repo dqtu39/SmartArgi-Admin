@@ -3,6 +3,7 @@ import { Card, Col, Row, Button, message, Modal, Select } from 'antd';
 import { collection, getDocs, doc, updateDoc } from 'firebase/firestore';
 import { FullScreenLoading } from "@/components";
 import { db } from '@/firebase';
+import {uploadText} from "@/service/knowledgeService";
 
 const { Option } = Select;
 
@@ -51,6 +52,7 @@ export const BlogsPage: React.FC = () => {
 
     const handleStatusChange = async () => {
         if (currentBlog) {
+            console.log(currentBlog)
             try {
                 const blogRef = doc(db, 'blogs', currentBlog.id);
                 await updateDoc(blogRef, { status: newStatus });
@@ -59,6 +61,9 @@ export const BlogsPage: React.FC = () => {
                         blog.id === currentBlog.id ? { ...blog, status: newStatus } : blog
                     )
                 );
+                if (newStatus === "approved") {
+                    const res = await uploadText(currentBlog.title, currentBlog.content)
+                }
                 message.success(`Blog status updated to ${newStatus} successfully`);
             } catch (error) {
                 console.error('Error updating blog status:', error);

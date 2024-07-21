@@ -10,6 +10,10 @@ interface KnowledgeItem {
     title: string;
     language: string;
     source: string;
+    source_type: string;
+    source_size: number;
+    status: string;
+    created_at: any
 }
 
 interface KnowledgeListProps {
@@ -19,7 +23,7 @@ interface KnowledgeListProps {
     };
 }
 
-const KnowledgeList: React.FC<KnowledgeListProps> = ({ data }) => {
+const KnowledgeList: React.FC<KnowledgeListProps> = ({ data, loading }) => {
     const [searchText, setSearchText] = useState('');
 
     const columns: ColumnsType<KnowledgeItem> = [
@@ -62,6 +66,26 @@ const KnowledgeList: React.FC<KnowledgeListProps> = ({ data }) => {
                 </>
             ),
         },
+        {
+            title: 'Type',
+            dataIndex: 'source_type',
+            key: 'source_type',
+        },
+        {
+            title: 'Size',
+            dataIndex: 'source_size',
+            key: 'source_size',
+        },
+        {
+            title: 'Status',
+            dataIndex: 'status',
+            key: 'status',
+        },
+        {
+            title: 'Action',
+            dataIndex: 'status',
+            key: 'status',
+        },
     ];
 
     return (
@@ -77,7 +101,7 @@ const KnowledgeList: React.FC<KnowledgeListProps> = ({ data }) => {
                 columns={columns}
                 dataSource={data.documents}
                 rowKey="title"
-                // pagination={{ total: data.total }}
+                loading={loading}
             />
         </Space>
     );
