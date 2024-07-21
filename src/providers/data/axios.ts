@@ -3,23 +3,23 @@ import axios, { type AxiosRequestConfig, type AxiosResponse } from "axios";
 import { refreshTokens, shouldRefreshToken } from "./refresh-token";
 
 export const axiosInstance = axios.create({
-  headers: {
-    "Content-Type": "application/json, text/plain, */*",
-    "Apollo-Require-Preflight": "true",
-  },
+  // headers: {
+  //   "Content-Type": "application/json, text/plain, */*",
+  //   "Apollo-Require-Preflight": "true",
+  // },
 });
 
 axiosInstance.interceptors.request.use(
-  async (config) => {
-    const accessToken = localStorage.getItem("access_token");
-    if (accessToken && config?.headers) {
-      config.headers.Authorization = `Bearer ${accessToken}`;
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  },
+  // async (config) => {
+  //   const accessToken = localStorage.getItem("access_token");
+  //   if (accessToken && config?.headers) {
+  //     config.headers.Authorization = `Bearer ${accessToken}`;
+  //   }
+  //   return config;
+  // },
+  // (error) => {
+  //   return Promise.reject(error);
+  // },
 );
 
 axiosInstance.interceptors.response.use(

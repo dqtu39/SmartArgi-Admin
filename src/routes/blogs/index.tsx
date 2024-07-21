@@ -68,6 +68,8 @@ export const BlogsPage: React.FC = () => {
         setIsStatusModalVisible(false);
     };
 
+
+
     const getStatusColor = (status: string) => {
         switch (status) {
             case 'pending': return 'orange';

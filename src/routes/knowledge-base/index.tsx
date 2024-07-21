@@ -132,7 +132,7 @@ export const KnowledgeBase = () => {
         setIsModelOpen(isModelOpen => !isModelOpen)
     }
 
-    const AddButton = () => (
+    const AddButton = ({children}) => (
         <Button
             style={{paddingLeft: 0}}
             type="link"
@@ -140,14 +140,16 @@ export const KnowledgeBase = () => {
             onClick={toggleModel}
 
         >
-            Add new knowledge
+            {children}
         </Button>
     )
 
     return (
         <Space direction="vertical" size="large" style={{ width: '100%' }}>
             <div style={{ marginBottom: '24px' }}>
-                <AddButton />
+                <AddButton>
+                    <span>Add new knowledge</span>
+                </AddButton>
             </div>
             <KnowledgeCreatePage
                 segmentType={segmentType}

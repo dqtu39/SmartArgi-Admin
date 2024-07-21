@@ -1,13 +1,6 @@
 import { axiosInstance } from '@/providers/data/axios'; // Update this import path as needed
 
-export interface KnowledgeUploadResponse {
-    // Define the response structure based on your API
-    success: boolean;
-    message: string;
-    // Add any other fields returned by your API
-}
-
-axiosInstance.defaults.baseURL = 'http://localhost:8000';
+axiosInstance.defaults.baseURL = 'https://argo-ai-llm-lzkpo.ondigitalocean.app/';
 
 export interface KnowledgeItem {
     title: string;
@@ -21,11 +14,11 @@ export interface GetAllDocumentsResponse {
 }
 
 export const getAllDocuments = async (): Promise<GetAllDocumentsResponse> => {
-    const response = await axiosInstance.get('/api/v1/docs/getAllDocuments?collection=algo_documents');
+    const response = await axiosInstance.get('/api/v1/docs/getAllDocuments?collection=argo_documents');
     return response.data;
 };
 export const uploadText = async (text: string, title: string): Promise<any> => {
-    const response = await axiosInstance.post('/api/v1/docs/uploadText', {document_title:title, document_text: text });
+    const response = await axiosInstance.post('/api/v1/docs/uploadText', {document_title: title, document_text: text });
     return response.data;
 };
 
