@@ -37,3 +37,10 @@ export const uploadLink = async (link: string): Promise<any> => {
     const response = await axiosInstance.post('/api/v1/docs/uploadLink', { document_link: link });
     return response.data;
 };
+
+export const deleteDocument = async (documentIds): Promise<any> => {
+    const res = await axiosInstance.delete('/api/v1/docs/deleteDocumentById', {
+        data: { document_ids: documentIds }
+    });
+    return res.result
+}

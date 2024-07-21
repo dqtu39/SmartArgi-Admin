@@ -5,7 +5,14 @@ import {Button, Form, message, Space} from "antd";
 
 import {KnowledgeCreatePage} from "@/routes/knowledge-base/create";
 import KnowledgeList from "@/routes/knowledge-base/KnowledgeList";
-import {getAllDocuments, KnowledgeItem, uploadFile, uploadLink, uploadText} from "@/service/knowledgeService";
+import {
+    deleteDocument,
+    getAllDocuments,
+    KnowledgeItem,
+    uploadFile,
+    uploadLink,
+    uploadText
+} from "@/service/knowledgeService";
 
 export const KnowledgeBase = () => {
     const [isModelOpen, setIsModelOpen] = useState<boolean>(false);
@@ -81,6 +88,18 @@ export const KnowledgeBase = () => {
         setIsModelOpen(isModelOpen => !isModelOpen)
     }
 
+    const handleDelete = async (id: string) => {
+        try {
+            await deleteDocument([id]);
+            message.success('Document deleted successfully');
+            setDocuments(prevDocuments => prevDocuments.filter(doc => doc.id !== id));
+            setTotal(prevTotal => prevTotal - 1);
+        } catch (error) {
+            console.error('Error deleting document:', error);
+            message.error('Failed to delete document');
+        }
+    };
+
     const AddButton = ({children}) => (
         <Button
             style={{paddingLeft: 0}}
@@ -108,7 +127,7 @@ export const KnowledgeBase = () => {
                 onFinish={handleFinish}
                 isModelOpen={isModelOpen}
             />
-            <KnowledgeList loading={loading} data={{ total, documents }} />
+            <KnowledgeList handleDelete={handleDelete} loading={loading} data={{ total, documents }} />
         </Space>
     );
 };
